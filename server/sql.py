@@ -1,9 +1,10 @@
 import sqlite3
+from config import DB
 
 #sql запросы
 def set_status(user_id, status):
    
-    conn = sqlite3.connect('invatedusers.db')
+    conn = sqlite3.connect(DB)
     cursor = conn.cursor()
     # Запрос для обновления статуса по user_id
     update_status_query = f'''
@@ -20,7 +21,7 @@ def set_status(user_id, status):
 
 def set_phone(user_id, phone):
    
-    conn = sqlite3.connect('invatedusers.db')
+    conn = sqlite3.connect(DB)
     cursor = conn.cursor()
     # Запрос для обновления статуса по user_id
     update_phone_query = f'''
@@ -37,7 +38,7 @@ def set_phone(user_id, phone):
 
 def set_time(user_id, time):
    
-    conn = sqlite3.connect('invatedusers.db')
+    conn = sqlite3.connect(DB)
     cursor = conn.cursor()
     # Запрос для обновления статуса по user_id
     update_time_query = f'''
@@ -54,7 +55,7 @@ def set_time(user_id, time):
 
 def set_exp(user_id, exp):
    
-    conn = sqlite3.connect('invatedusers.db')
+    conn = sqlite3.connect(DB)
     cursor = conn.cursor()
     # Запрос для обновления статуса по user_id
     update_exp_query = f'''
@@ -71,7 +72,7 @@ def set_exp(user_id, exp):
 
 def set_lolz(user_id, lolz):
    
-    conn = sqlite3.connect('invatedusers.db')
+    conn = sqlite3.connect(DB)
     cursor = conn.cursor()
     # Запрос для обновления статуса по user_id
     update_lolz_query = f'''
@@ -89,7 +90,7 @@ def set_lolz(user_id, lolz):
 def add_user(user_id):
     
     #подключение в базе данных 
-    conn = sqlite3.connect('invatedusers.db')
+    conn = sqlite3.connect(DB)
     cursor = conn.cursor()
     #запрос на добавление нового юзера со статусом по умолчанию - start 
     add_user_query = f'''
@@ -104,7 +105,7 @@ def add_user(user_id):
 
 def get_status(user_id):
 
-    conn = sqlite3.connect('invatedusers.db')
+    conn = sqlite3.connect(DB)
     cursor = conn.cursor()
 
     # Запрос для проверки наличия записи с заданным user_id
@@ -123,44 +124,7 @@ def get_status(user_id):
     conn.close()
     
     if result == 1:
-       conn = sqlite3.connect('invatedusers.db')
-       cursor = conn.cursor()
-       # Запрос для получения статуса по user_id
-       get_status_query = f'''
-       SELECT status
-       FROM users
-       WHERE user_id = ?;
-       '''
-       # Выполнение запроса с передачей параметра user_id
-       cursor.execute(get_status_query, (user_id,))
-       status = cursor.fetchone()
-
-       conn.commit()
-       conn.close()
-
-       return status
-    
-    else:
-       return "0"
-
-def get_users(user_id):
-
-    conn = sqlite3.connect('invatedusers.db')
-    cursor = conn.cursor()
-
-    # Выполняем SQL-запрос для извлечения всех user_id
-    query = text("SELECT user_id FROM your_table")
-
-    # Извлекаем все значения user_id в список
-    user_ids = [row[0] for row in result]
-    # Выполнение запроса с передачей параметра user_id
-    cursor.execute(check_user_query, (user_id,))
-    result = cursor.fetchone()[0]
-    conn.commit()
-    conn.close()
-    
-    if result == 1:
-       conn = sqlite3.connect('invatedusers.db')
+       conn = sqlite3.connect(DB)
        cursor = conn.cursor()
        # Запрос для получения статуса по user_id
        get_status_query = f'''
@@ -182,7 +146,7 @@ def get_users(user_id):
 
 def get_user_info(user_id):
 
-    conn = sqlite3.connect('invatedusers.db')
+    conn = sqlite3.connect(DB)
     cursor = conn.cursor()
 
     # Запрос для проверки наличия записи с заданным user_id
@@ -201,7 +165,7 @@ def get_user_info(user_id):
     conn.close()
     
     if result == 1:
-       conn = sqlite3.connect('invatedusers.db')
+       conn = sqlite3.connect(DB)
        cursor = conn.cursor()
        # Запрос для получения статуса по user_id
        get_status_query = f'''
@@ -223,7 +187,7 @@ def get_user_info(user_id):
 
 #созданию соединения (не используется в коде)
 def create_connection():
-    connection = sqlite3.connect('invatedusers.db')
+    connection = sqlite3.connect(DB)
     cursor = connection.cursor()
 
     # Создаем таблицу для хранения подписок пользователей, если она не существует

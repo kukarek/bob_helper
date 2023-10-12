@@ -87,7 +87,7 @@ def reply_message_handler(user_id, message_text):
     elif status == "lolz":
         response, notify = lolz_answer_handler(user_id=user_id,message_text=message_text)
     
-    elif status == "check":
+    else:
         response, notify = None, None
 
     return response, notify

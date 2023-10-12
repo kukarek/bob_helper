@@ -2,18 +2,13 @@ import logging
 from aiogram import Bot, Dispatcher, executor, types
 from aiogram.types import Message
 from aiogram.utils import executor
-import asyncio
 import chatbot_logic
 from aiogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
 import sql
 import requests
 from bs4 import BeautifulSoup
+from config import API_TOKEN, BOB, ADMINS
 
-API_TOKEN = '6588918438:AAEuWOePbDIWlDufBsnHTku9wj9oHlU5IrQ'  # тестбот
-
-Bob = 6356732052
-admins = [6108609160]
-channel = -1001821448494
 # Установка уровня логирования
 logging.basicConfig(level=logging.INFO)
 
@@ -22,7 +17,7 @@ bot = Bot(token=API_TOKEN)
 dp = Dispatcher(bot)
 
 def admin(id):
-    for admin in admins:
+    for admin in ADMINS:
         if admin == id:
             return True
     return False
@@ -75,7 +70,8 @@ async def on_button1_click(query: CallbackQuery):
     user_id = int(query.data.split("_")[1]) #от кого заявка
     message_id = int(query.data.split("_")[2]) #id сообщения у админа
  
-    await bot.delete_message(chat_id=Bob, message_id=message_id)
+    sql.set_status(user_id=user_id, status="accept")
+    await bot.delete_message(chat_id=BOB, message_id=message_id)
     await bot.send_message(chat_id=user_id, text="Ваша заявка принята!\n\n"+
                                                  "Чат - https://t.me/+E_Xsqxn55pY0OTMy\n\n"+
                                                  "Канал Новости - https://t.me/+CpMVBlTqtZNjNDIy")
@@ -86,8 +82,9 @@ async def on_button2_click(query: CallbackQuery):
     
     user_id = int(query.data.split("_")[1]) #от кого заявка
     message_id = int(query.data.split("_")[2]) #id сообщения у админа
- 
-    await bot.delete_message(chat_id=Bob, message_id=message_id)
+    
+    sql.set_status(user_id=user_id, status="reject")
+    await bot.delete_message(chat_id=BOB, message_id=message_id)
     await bot.send_message(chat_id=user_id, text="Ваша заявка отклонена!")
 
 @dp.message_handler(commands=['test'])
@@ -116,9 +113,9 @@ async def echo(message: Message):
         
         if notify != None:
 
-            mess = await bot.send_message(chat_id=Bob, text=notify)
+            mess = await bot.send_message(chat_id=BOB, text=notify)
             keyboard = generate_inline_keyboard(user_id=message.from_id, message_id=mess.message_id)
-            await bot.edit_message_reply_markup(chat_id=Bob, message_id=mess.message_id, reply_markup=keyboard)
+            await bot.edit_message_reply_markup(chat_id=BOB, message_id=mess.message_id, reply_markup=keyboard)
 
 def main():
     # Запуск бота
